@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTS STORES | Premium Store</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans (Tipografía moderna y limpia) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons para iconos vectoriales de alta calidad -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#eedeff',
+                            500: '#6366f1', /* Indigo */
+                            600: '#4f46e5',
+                            900: '#0f172a', /* Slate 900 */
+                            950: '#020617', /* Slate 955 (Fondo ultra oscuro) */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Efecto de desenfoque de vidrio (Glassmorphism) para el Header */
+        .glass-header {
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        /* Tarjetas de productos premium */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Luces de fondo ambientales (No interfieren con el contenido) */
+        .bg-glow-1 {
+            position: absolute;
+            top: -10%;
+            left: 15%;
+            width: 70vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(0,0,0,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .bg-glow-2 {
+            position: absolute;
+            bottom: 20%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(0,0,0,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+
+
+
+  body { 
+            background: #000; 
+            color: #fff; 
+            font-family: sans-serif; 
+            min-height: 100vh; 
+            overflow-y: auto;  
+            scroll-snap-type: y mandatory; 
+            overflow-x: hidden; 
+        }
+        
+        .section {
+            min-height: auto; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 10px 0;
+        }
+        
+        #catalog {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Fondo difuminado */
+        .bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.25; z-index: 0; }
+        
+        .content-3d { 
+            position: relative; 
+            z-index: 1; 
+            text-align: center; 
+            align-items: center;
+            transform-style: preserve-3d; 
+            transition: transform 0.1s ease-out; 
+            padding: 10px; 
+            margin: 5px;   
+            background: rgba(26, 26, 30, 0.8);
+            border-radius: 20px;
+        }
+
+        /* Ajuste específico para la imagen */
+        .product-img { 
+            width: 200px; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 15px; 
+            margin: 0 auto;      
+            border: 2px solid #00e5ff;
+            transform: translateZ(20px); 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .product-img:hover {
+            box-shadow: 0 0 15px #00e5ff;
+        }
+
+        .title { font-size: 1.5rem; margin: 5px 0; }
+        .price { font-size: 1.2rem; margin: 5px 0; }
+        .details { margin: 5px 0; font-size: 1rem; }
+        
+        /* Botón */ 
+        .buy-btn {
+            position: relative;
+            width: 120px;
+            height: 40px;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            color: white;
+            flex-direction: column;
+            justify-content: center;
+            border: none;
+            padding: 12px;
+            gap: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px auto 0;
+        }
+
+        .buy-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            left: -4px;
+            top: -1px;
+            margin: auto;
+            width: 128px;
+            height: 48px;
+            border-radius: 10px;
+            background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100% );
+            z-index: -10;
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .buy-btn:after {
+            content: "";
+            z-index: -1;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100% );
+            transform: translate3d(0, 0, 0) scale(0.95);
+            filter: blur(20px);
+        }
+
+        .buy-btn:hover::after { filter: blur(30px); }
+        .buy-btn:hover::before { transform: rotate(-180deg); }
+        .buy-btn:active::before { scale: 0.7; }
+
+        .box { margin: 5px; padding: 25px; background: rgba(26, 26, 30, 0.8); border-radius: 12px; box-sizing: border-box; }
+    
+        .content-3d {
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .content-3d .box, 
+        .content-3d .title, 
+        .content-3d .buy-btn {
+            transition: transform 3s ease, opacity 3s ease;
+        }
+
+        .content-3d:hover .box { transform: translateZ(50px) translateY(0); }
+        .content-3d:hover .title { transform: translateZ(80px) translateY(0); }
+        .content-3d .box { transform: translateZ(20px) translateY(50px); }
+        .content-3d .title { transform: translateZ(20px) translateY(-50px); }
+    
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ESTILOS DE LA GALERÍA / OVERLAY (EFECTO BARAJA) */
+        .gallery-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            cursor: zoom-out;
+        }
+        .gallery-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .gallery-img {
+            max-width: 85%;
+            max-height: 70vh;
+            border-radius: 20px;
+            border: 3px solid #00e5ff;
+            /* Efecto inicial de baraja guardada (oculta, girada y pequeña) */
+            transform: scale(0.3) rotate(-25deg) translateY(100px);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.6);
+        }
+        /* Cuando se activa, se despliega al frente de forma limpia */
+        .gallery-overlay.active .gallery-img {
+            transform: scale(1) rotate(0deg) translateY(0);
+        }
+        .gallery-title {
+            margin-top: 20px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00e5ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </style>
+</head>
+<body class="bg-brand-950 text-slate-100 min-h-screen overflow-x-hidden relative font-sans antialiased">
+
+    <!-- Luces de fondo decorativas -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <!-- HEADER PRINCIPAL (Estructura de 3 columnas para centrado perfecto) -->
+    <header class="sticky top-0 z-50 glass-header w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 grid grid-cols-3 items-center">
+            
+            <!-- Columna Izquierda: Botón de menú minimalista (para balance visual) -->
+            <div class="flex items-center justify-start">
+                <button class="p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+   <div class="flex items-center justify-center gap-3">
+    
+    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 shrink-0 overflow-hidden">
+        <img src="photo_4987929552063499257_w.jpg" alt="Logo MTS" class="w-full h-full object-cover">
+    </div>
+    
+    <span class="text-xl sm:text-2xl font-black tracking-[0.2em] bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-indigo-300 select-none">
+        MTS STORES 
+    </span>
+</div>
+            <!-- Columna Derecha: Acciones de usuario -->
+            <div class="flex items-center justify-end gap-2 sm:gap-4">
+                <button class="p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+                <button class="p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200 relative">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <!-- Indicador de carrito -->
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full ring-2 ring-brand-950"></span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <!-- SECCIÓN HERO (Presentación de la tienda) -->
+        <section class="text-center max-w-3xl mx-auto space-y-6 py-8">
+            <span class="px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 uppercase">
+                Nueva Colección Disponible
+            </span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                Eleva tu estilo con <br>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+                    tecnología y diseño.
+                </span>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-400 font-light max-w-xl mx-auto">
+                Explora nuestra curación exclusiva de productos premium diseñados para el día a día moderno.
+            </p>
+        </section>
+
+        <!-- SECCIÓN DE PRODUCTOS (Grid responsivo que evita solapamientos) -->
+        <section class="space-y-8">
+            <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-white tracking-wide">Productos Destacados</h2>
+                <a href="#" class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1">
+                    Ver todo <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            
+               
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+      
+    </main>
+
+
+ <div id="catalog"></div>
+
+    <div id="galleryOverlay" class="gallery-overlay" onclick="cerrarImagen()">
+        <img id="galleryImg" class="gallery-img" alt="Vista ampliada">
+        <div id="galleryTitle" class="gallery-title"></div>
+    </div>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCTVyJCtPtgLGckFyK8eheLMinL7qFWfKE",
+        authDomain: "mts-index.firebaseapp.com",
+        databaseURL: "https://mts-index-default-rtdb.firebaseio.com",
+        projectId: "mts-index",
+        storageBucket: "mts-index.firebasestorage.app",
+        messagingSenderId: "872665644760",
+        appId: "1:872665644760:web:14888110858c00b70121ad",
+        measurementId: "G-R7S6MEEHRK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const catalog = document.getElementById('catalog');
+
+    // Funciones globales para que sigan siendo accesibles
+    window.enviarWhatsApp = (nombre, precio, numero) => {
+        const mensaje = `Hola, vengo por el servicio: ${nombre} con precio de RD$ ${parseFloat(precio).toLocaleString()}.`;
+        window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
+    };
+
+    window.abrirImagen = (src, nombre) => {
+        const overlay = document.getElementById('galleryOverlay');
+        document.getElementById('galleryImg').src = src;
+        document.getElementById('galleryTitle').innerText = nombre;
+        overlay.style.display = 'flex';
+        setTimeout(() => overlay.classList.add('active'), 10);
+    };
+
+    window.cerrarImagen = () => {
+        const overlay = document.getElementById('galleryOverlay');
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.style.display = 'none', 400);
+    };
+
+    // Renderizado en tiempo real
+    onValue(ref(db, 'products'), (snapshot) => {
+        const data = snapshot.val();
+        const products = data ? Object.values(data) : [];
+        
+        catalog.innerHTML = '';
+
+        if(products.length === 0) {
+            catalog.innerHTML = '<div class="section"><h2 style="z-index:1;">No hay productos registrados.</h2></div>';
+        } else {
+            products.forEach(p => {
+                catalog.innerHTML += `
+                    <div class="section">
+                        <div class="content-3d">
+                            <img src="${p.imageBg}" class="bg-img" alt="Fondo">
+                            <div class="box">
+                                <img src="${p.imageItem}" class="product-img" alt="Producto" onclick="abrirImagen('${p.imageItem}', '${p.name}')">
+                            </div>
+                            <div class="title">${p.name}</div>
+                            <div class="price">RD$ ${parseFloat(p.price).toLocaleString()}</div>
+                            <div class="details">${p.details}</div>
+                            <button class="buy-btn" onclick="enviarWhatsApp('${p.name}', '${p.price}', '${p.whatsapp}')">COMPRAR AHORA</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Reactivar animación 3D tras el render
+            document.querySelectorAll('.section').forEach(section => {
+                const content = section.querySelector('.content-3d');
+                section.onmousemove = (e) => {
+                    let rect = section.getBoundingClientRect();
+                    let rotateX = ((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * -15; 
+                    let rotateY = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 15;
+                    content.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                };
+                section.onmouseleave = () => {
+                    content.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                    content.style.transition = `transform 0.5s ease`;
+                };
+                section.onmouseenter = () => content.style.transition = 'none';
+            });
+        }
+    });
+</script>
+
+
+
+
+
+  <!-- SECCIÓN DE GARANTÍAS (Aporta seriedad y profesionalismo) -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-white/5">
+            <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-400">
+                    <i data-lucide="truck" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white">Envío Express Asegurado</h4>
+                    <p class="text-sm text-slate-400 mt-1">Recibe tus productos de forma rápida y segura en la puerta de tu casa.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-400">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white">Garantía de Calidad</h4>
+                    <p class="text-sm text-slate-400 mt-1">Todos nuestros productos pasan por un estricto control de calidad.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-400">
+                    <i data-lucide="credit-card" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white">Pagos 100% Seguros</h4>
+                    <p class="text-sm text-slate-400 mt-1">Procesamos tus pagos con encriptación SSL de nivel bancario.</p>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+    <!-- FOOTER MINIMALISTA -->
+    <footer class="border-t border-white/5 mt-20 bg-brand-950/80 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-xs text-slate-500">
+                &copy; 2024 MTS STORES. Todos los derechos reservados.
+            </p>
+            <div class="flex gap-6 text-xs text-slate-400">
+                <a href="#" class="hover:text-white transition-colors">Términos</a>
+                <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+                <a href="#" class="hover:text-white transition-colors">Contacto</a>
+            </div>
+        </div>
+    </footer>
