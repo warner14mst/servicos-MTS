@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel - Registrar</title>
+    <style>
+        body { background: #121214; color: #e1e1e6; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .form-card { background: #1a1a1e; padding: 30px; border-radius: 8px; width: 350px; margin-bottom: 20px; }
+        label { display: block; margin: 12px 0 6px; color: #a8a8b3; }
+        input, textarea { width: 100%; padding: 10px; background: #121214; border: 1px solid #29292e; border-radius: 4px; color: #fff; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin-top: 20px; background: #00e5ff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        
+        /* Lista de control */
+        .list-container { background: #1a1a1e; padding: 20px; border-radius: 8px; width: 350px; box-sizing: border-box; }
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #29292e; }
+        .product-item:last-child { border: none; }
+        .del-btn { background: #ff3333; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; width: auto; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2 style="color: #00e5ff; margin-top: 0;">Registrar Artículo Premium</h2>
+        <form id="productForm">
+            <label>Nombre</label>
+            <input type="text" id="name" required>
+            <label>Precio (RD$)</label>
+            <input type="number" id="price" required>
+            <label>Número de WhatsApp</label>
+            <input type="text" id="whatsapp" placeholder="Ej: 18090000000" required>
+            <label>Foto Fondo (Grande)</label>
+            <input type="file" id="imageBg" accept="image/*" required>
+            <label>Foto Producto (Pequeña)</label>
+            <input type="file" id="imageItem" accept="image/*" required>
+            <label>Detalles</label>
+            <textarea id="details" required></textarea>
+            <button type="submit">Publicar</button>
+        </form>
+    </div>
+
+    <div class="list-container">
+        <h3 style="color: #00e5ff; margin-top: 0;">Productos Registrados</h3>
+        <div id="productList"></div>
+    </div>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCTVyJCtPtgLGckFyK8eheLMinL7qFWfKE",
+        authDomain: "mts-index.firebaseapp.com",
+        databaseURL: "https://mts-index-default-rtdb.firebaseio.com",
+        projectId: "mts-index",
+        storageBucket: "mts-index.firebasestorage.app",
+        messagingSenderId: "872665644760",
+        appId: "1:872665644760:web:14888110858c00b70121ad",
+        measurementId: "G-R7S6MEEHRK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const productsRef = ref(db, 'products');
+    const productList = document.getElementById('productList');
+
+    const getBase64 = (file) => new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+    });
+
+    // Escucha de cambios en tiempo real
+    onValue(productsRef, (snapshot) => {
+        const data = snapshot.val();
+        productList.innerHTML = '';
+        
+        if (!data) {
+            productList.innerHTML = '<p style="color: #a8a8b3; font-size: 0.9rem; margin: 0;">No hay productos.</p>';
+            return;
+        }
+
+        Object.entries(data).forEach(([key, p]) => {
+            productList.innerHTML += `
+                <div class="product-item">
+                    <span style="font-size: 0.9rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${p.name}</span>
+                    <button class="del-btn" onclick="deleteProduct('${key}')">Eliminar</button>
+                </div>
+            `;
+        });
+    });
+
+    // Función global para borrar
+    window.deleteProduct = (key) => {
+        remove(ref(db, 'products/' + key));
+    };
+
+    // Envío del formulario
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const bgFile = document.getElementById('imageBg').files[0];
+        const itemFile = document.getElementById('imageItem').files[0];
+        
+        const newProduct = {
+            name: document.getElementById('name').value,
+            price: document.getElementById('price').value,
+            whatsapp: document.getElementById('whatsapp').value,
+            details: document.getElementById('details').value,
+            imageBg: await getBase64(bgFile),
+            imageItem: await getBase64(itemFile)
+        };
+        
+        push(productsRef, newProduct);
+        
+        alert('Producto premium guardado.');
+        document.getElementById('productForm').reset();
+    });
+</script>
+</body>
+</html>

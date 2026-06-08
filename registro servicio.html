@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - MTS Services</title>
+    <style>
+        body { background: #0a0a0c; color: #fff; font-family: sans-serif; padding: 20px; }
+        .admin-box { max-width: 600px; margin: auto; background: #1a1a1e; padding: 20px; border-radius: 12px; border: 1px solid #00e5ff; }
+        input, textarea { width: 100%; margin-bottom: 10px; padding: 10px; background: #000; border: 1px solid #333; color: #fff; box-sizing: border-box; }
+        button { background: #00e5ff; border: none; padding: 10px; cursor: pointer; font-weight: bold; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333; }
+        .btn-group { display: flex; gap: 5px; }
+    </style>
+</head>
+<body>
+    <div class="admin-box">
+        <h2>Gestionar Servicios MTS</h2>
+        <input type="text" id="name" placeholder="Nombre Servicio">
+        <input type="number" id="price" placeholder="Precio (RD$)">
+        <input type="text" id="whatsapp" placeholder="Número de WhatsApp (Ej: 18090000000)">
+        <textarea id="details" placeholder="Descripción"></textarea>
+        <input type="file" id="image" accept="image/*">
+        <button onclick="saveService()">Registrar Servicio</button>
+        <hr>
+        <div id="serviceList"></div>
+    </div>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCTVyJCtPtgLGckFyK8eheLMinL7qFWfKE",
+        authDomain: "mts-index.firebaseapp.com",
+        databaseURL: "https://mts-index-default-rtdb.firebaseio.com",
+        projectId: "mts-index",
+        storageBucket: "mts-index.firebasestorage.app",
+        messagingSenderId: "872665644760",
+        appId: "1:872665644760:web:14888110858c00b70121ad",
+        measurementId: "G-R7S6MEEHRK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const servicesRef = ref(db, 'mts_services');
+    const list = document.getElementById('serviceList');
+
+    // Función para Guardar en Firebase
+    window.saveService = function() {
+        const fileInput = document.getElementById('image');
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = () => {
+            const id = Date.now();
+            const newServiceRef = ref(db, 'mts_services/' + id);
+            set(newServiceRef, {
+                id: id,
+                name: document.getElementById('name').value,
+                price: document.getElementById('price').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                details: document.getElementById('details').value,
+                image: reader.result
+            });
+            alert("Servicio guardado con éxito");
+        };
+        reader.readAsDataURL(file);
+    };
+
+    // Función para Borrar en Firebase
+    window.deleteService = function(id) {
+        remove(ref(db, 'mts_services/' + id));
+    };
+
+    // Renderizado en tiempo real
+    onValue(servicesRef, (snapshot) => {
+        const data = snapshot.val();
+        list.innerHTML = '';
+        if (data) {
+            Object.values(data).forEach(s => {
+                list.innerHTML += `
+                    <div class="list-item">
+                        <span>${s.name}</span>
+                        <div class="btn-group">
+                            <button onclick="enviarWhatsApp('${s.name}', '${s.price}', '${s.whatsapp}')" style="background:#25d366; color:#000;">Probar WA</button>
+                            <button onclick="deleteService(${s.id})" style="background:red; color:#fff;">Borrar</button>
+                        </div>
+                    </div>`;
+            });
+        }
+    });
+
+    window.enviarWhatsApp = function(nombre, precio, numero) {
+        const mensaje = `Hola, vengo por el servicio: ${nombre} con precio de RD$ ${parseFloat(precio).toLocaleString()}.`;
+        const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+        window.open(url, '_blank');
+    };
+</script>
+</body>
+</html>

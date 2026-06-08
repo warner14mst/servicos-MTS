@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios | MTS Master Software</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            cyan: '#00e5ff',
+                            purple: '#7000ff',
+                            pink: '#ff007a',
+                            darkBg: '#09090b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, rgba(9, 9, 11, 0.85), rgba(9, 9, 11, 0.95)), 
+                              url('https://i.pinimg.com/736x/b4/49/c0/b449c0c0c2fa9acc3ef66e6ec4b54ab0.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .glass-header {
+            background: rgba(9, 9, 11, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+        }
+
+        .glass-card {
+            background: rgba(18, 18, 20, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px -10px rgba(0, 229, 255, 0.15);
+        }
+
+        .box-gradient {
+            padding: 3px;
+            border-radius: 24px;
+            background: linear-gradient(45deg, #00e5ff, #7000ff, #ff007a);
+            background-size: 300% 300%;
+            animation: gradientMove 5s ease infinite;
+            display: inline-block;
+        }
+        
+        @keyframes gradientMove { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen font-sans antialiased">
+
+    <header class="sticky top-0 z-50 glass-header w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 grid grid-cols-3 items-center">
+            
+            <div class="flex items-center justify-start">
+                <a href="tienda.html" class="flex items-center gap-2 text-xs sm:text-sm font-bold tracking-wider text-brand-cyan hover:opacity-80 transition-all duration-200">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">TIENDA MTS</span>
+                </a>
+            </div>
+
+            <div class="flex items-center justify-center text-center">
+                <span class="text-sm sm:text-lg font-black tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-brand-cyan select-none">
+                    MTS MASTER SOFTWARE
+                </span>
+            </div>
+
+            <div class="flex items-center justify-end">
+                <a href="https://wa.me/18090000000" target="_blank" class="p-2 text-slate-400 hover:text-brand-cyan transition-colors">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20 relative z-10">
+
+        <section class="text-center max-w-3xl mx-auto space-y-6">
+            <div class="inline-flex p-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 mb-2">
+                <span class="px-4 py-1 rounded-full text-[10px] font-extrabold tracking-widest text-brand-cyan uppercase">
+                    Catálogo de Soluciones
+                </span>
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                Nuestros <br>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-cyan via-indigo-400 to-brand-pink">
+                    Servicios Especializados
+                </span>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-400 font-light max-w-xl mx-auto">
+                Soluciones de software a la medida, diseñadas y ejecutadas por expertos en tecnología.
+            </p>
+        </section>
+
+        <section class="space-y-8">
+            <div id="service-catalog" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <section class="max-w-4xl mx-auto bg-zinc-950/60 border border-white/5 rounded-3xl p-8 sm:p-12 backdrop-blur-md space-y-10">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    MTS Master Software
+                </h2>
+                <p class="text-brand-cyan font-semibold text-sm tracking-wider uppercase">
+                    Excelencia Tecnológica a su Alcance
+                </p>
+            </div>
+
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed text-center font-light max-w-3xl mx-auto">
+                Fundada en 2022 por <strong>Gabriel Sosa</strong> y <strong>Andrés Jasiel Eusebio</strong>, MTS Master Software nació con la visión de cerrar la brecha entre la complejidad tecnológica y las necesidades reales de nuestros clientes. Somos una firma especializada en ofrecer soluciones digitales integrales.
+            </p>
+
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-white border-b border-white/5 pb-2">Nuestros Pilares de Competencia</h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-5 rounded-2xl bg-white/[0.02] border-l-4 border-brand-cyan hover:bg-brand-cyan/[0.03] transition-all duration-300">
+                        <b class="text-white text-sm block mb-1">Arquitectura y Desarrollo Web</b>
+                        <span class="text-xs text-slate-400">Diseño de plataformas web dinámicas, funcionales y estéticamente impactantes (HTML, CSS, JavaScript).</span>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-white/[0.02] border-l-4 border-brand-cyan hover:bg-brand-cyan/[0.03] transition-all duration-300">
+                        <b class="text-white text-sm block mb-1">Gestión y Ciencia de Datos</b>
+                        <span class="text-xs text-slate-400">Administración de bases de datos relacionales y no relacionales (MySQL, NoSQL) y análisis crítico.</span>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-white/[0.02] border-l-4 border-brand-cyan hover:bg-brand-cyan/[0.03] transition-all duration-300">
+                        <b class="text-white text-sm block mb-1">Programación y Lógica de Software</b>
+                        <span class="text-xs text-slate-400">Desarrollo de aplicaciones robustas mediante lenguajes como C++, C#, Python, Java y JavaScript.</span>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-white/[0.02] border-l-4 border-brand-cyan hover:bg-brand-cyan/[0.03] transition-all duration-300">
+                        <b class="text-white text-sm block mb-1">Innovación en Entornos Virtuales</b>
+                        <span class="text-xs text-slate-400">Programación robótica en entornos simulados y optimización de flujos de trabajo corporativos.</span>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white/[0.02] border-l-4 border-brand-pink hover:bg-brand-pink/[0.02] transition-all duration-300 mt-4">
+                    <b class="text-white text-sm block mb-1">Producción de Contenido Digital</b>
+                    <span class="text-xs text-slate-400">Edición profesional de fotografía y video para potenciar la identidad visual de su marca.</span>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-white/5 text-center space-y-2">
+                <h4 class="text-white font-bold">Nuestra Propuesta de Valor</h4>
+                <p class="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                    En MTS Master Software, cada proyecto es un compromiso con la calidad. Nuestra metodología garantiza que cada línea de código sea ejecutada bajo los más altos estándares de la industria, asegurando escalabilidad y seguridad.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/5 bg-zinc-950/80 py-8 mt-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-xs text-slate-500">
+                &copy; 2024 MTS Master Software. Todos los derechos reservados.
+            </p>
+            <div class="flex gap-6 text-xs text-slate-400">
+                <a href="#" class="hover:text-white transition-colors">Términos de Servicio</a>
+                <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCTVyJCtPtgLGckFyK8eheLMinL7qFWfKE",
+        authDomain: "mts-index.firebaseapp.com",
+        databaseURL: "https://mts-index-default-rtdb.firebaseio.com",
+        projectId: "mts-index",
+        storageBucket: "mts-index.firebasestorage.app",
+        messagingSenderId: "872665644760",
+        appId: "1:872665644760:web:14888110858c00b70121ad",
+        measurementId: "G-R7S6MEEHRK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const catalog = document.getElementById('service-catalog');
+
+    // Escucha en tiempo real la ruta 'mts_services'
+    onValue(ref(db, 'mts_services'), (snapshot) => {
+        const data = snapshot.val();
+        const services = data ? Object.values(data) : [];
+        
+        catalog.innerHTML = ''; // Limpia el catálogo antes de renderizar
+
+        if(services.length === 0) {
+            catalog.innerHTML = `
+                <div class="col-span-full py-16 text-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="package-open" class="w-6 h-6 text-slate-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white">No hay servicios registrados</h3>
+                    <p class="text-sm text-slate-400 mt-1">Por favor, añade servicios desde tu panel de administración.</p>
+                </div>
+            `;
+        } else {
+            services.forEach(s => {
+                catalog.innerHTML += `
+                    <div class="glass-card rounded-3xl p-6 flex flex-col justify-between h-full space-y-6">
+                        <div class="text-center">
+                            <div class="box-gradient">
+                                <div class="bg-zinc-900 p-1.5 rounded-[21px] overflow-hidden flex items-center justify-center">
+                                    <img src="${s.image}" class="w-48 h-48 object-cover rounded-[15px]" alt="${s.name}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 flex-grow flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <h3 class="text-xl font-bold text-white tracking-wide line-clamp-2">${s.name}</h3>
+                                <p class="text-xs text-slate-400 leading-relaxed line-clamp-3">${s.details}</p>
+                            </div>
+                            
+                            <div class="space-y-4 pt-4">
+                                <div class="text-2xl font-black text-brand-cyan">
+                                    RD$ ${parseFloat(s.price).toLocaleString()}
+                                </div>
+                                <button 
+                                    class="w-full py-3.5 px-6 bg-brand-cyan hover:bg-white text-zinc-950 font-bold rounded-xl transition-all duration-300 shadow-lg shadow-brand-cyan/10 hover:shadow-white/10 text-sm tracking-wider uppercase"
+                                    onclick="window.open('https://wa.me/${s.whatsapp}?text=Hola,%20solicito%20el%20servicio:%20${encodeURIComponent(s.name)}')">
+                                    SOLICITAR SERVICIO
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        lucide.createIcons();
+    });
+</script>
+</body>
+</html>
